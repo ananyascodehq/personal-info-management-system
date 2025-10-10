@@ -3,6 +3,7 @@ from mysql.connector import Error
 
 DB_NAME = "personal_info_db"
 
+
 def get_server_connection():
     try:
         return mysql.connector.connect(
@@ -29,6 +30,7 @@ def get_connection():
     except Error as e:
         print(f"❌ Database connection failed: {e}")
         return None
+
 
 def ensure_database_exists():
     """Checks if database exists, and creates it if not."""

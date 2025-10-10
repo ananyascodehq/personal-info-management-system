@@ -1,45 +1,82 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <h2>Add Person</h2>
 
 <form method="POST" onsubmit="return validateForm()">
-    <div class="mb-2">
-        <input class="form-control" name="name" placeholder="Full Name" required>
-    </div>
-    <div class="mb-2">
-        <input class="form-control" name="dob" type="date" max="{{ current_date }}" title="Date cannot be in the future">
-    </div>
+  <div class="mb-2">
+    <input class="form-control" name="name" placeholder="Full Name" required />
+  </div>
 
-    <div class="mb-2">
-        <input class="form-control" name="gender" placeholder="Gender">
-    </div>
-    <div class="mb-2">
-        <input class="form-control" name="phone" placeholder="Phone (10 digits)" pattern="\d{10}" required>
-    </div>
-    <div class="mb-2">
-        <input class="form-control" name="email" type="email" placeholder="Email" required>
-    </div>
-    <div class="mb-2">
-        <textarea class="form-control" name="address" placeholder="Address"></textarea>
-    </div>
-    <button class="btn btn-success">Add</button>
+  <!-- 🎂 Date Picker -->
+  <div class="mb-2">
+    <label for="dob"><b>Date of Birth</b></label>
+    <input
+      class="form-control"
+      name="dob"
+      id="dob"
+      type="date"
+      max="{{ current_date }}"
+      required
+      title="Date cannot be in the future"
+    />
+  </div>
+
+  <!-- 🚻 Gender Dropdown -->
+  <div class="mb-2">
+    <label for="gender"><b>Gender</b></label>
+    <select class="form-select" name="gender" id="gender" required>
+      <option value="" disabled selected>Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <input
+      class="form-control"
+      name="phone"
+      placeholder="Phone (10 digits)"
+      pattern="\d{10}"
+      required
+    />
+  </div>
+  <div class="mb-2">
+    <input
+      class="form-control"
+      name="email"
+      type="email"
+      placeholder="Email"
+      required
+    />
+  </div>
+  <div class="mb-2">
+    <textarea
+      class="form-control"
+      name="address"
+      placeholder="Address"
+    ></textarea>
+  </div>
+  <button class="btn btn-success">Add</button>
 </form>
 
 <script>
-function validateForm() {
+  function validateForm() {
     const name = document.querySelector("[name='name']").value.trim();
     const phone = document.querySelector("[name='phone']").value.trim();
     const email = document.querySelector("[name='email']").value.trim();
+    const gender = document.querySelector("[name='gender']").value;
 
-    if (!name || !phone || !email) {
-        alert("⚠️ Please fill in all required fields: Name, Phone, and Email.");
-        return false;
+    if (!name || !phone || !email || !gender) {
+      alert(
+        "⚠️ Please fill in all required fields: Name, Phone, Email, and Gender."
+      );
+      return false;
     }
     if (!/^\d{10}$/.test(phone)) {
-        alert("⚠️ Phone number must be exactly 10 digits.");
-        return false;
+      alert("⚠️ Phone number must be exactly 10 digits.");
+      return false;
     }
     return true;
-}
+  }
 </script>
 {% endblock %}

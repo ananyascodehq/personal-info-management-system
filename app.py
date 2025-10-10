@@ -69,6 +69,7 @@ def add_person():
         dob = request.form['dob'].strip()
         gender = request.form['gender'].strip()
         phone = normalize_phone(request.form['phone'])
+        email = request.form['email'].strip()   # ✅ Added line
         address = request.form['address'].strip()
 
         # 🧱 Basic mandatory field check
@@ -92,7 +93,13 @@ def add_person():
             flash("⚠️ Phone number must be exactly 10 digits.", "warning")
             return redirect(url_for('add_person'))
 
-        # Database logic continues here ↓
+        # 📧 Validate email format
+        email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(email_pattern, email):
+            flash("⚠️ Invalid email address format.", "warning")
+            return redirect(url_for('add_person'))
+
+        # Database logic
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT IFNULL(MAX(person_id), 0) + 1 FROM Persons")
@@ -132,13 +139,25 @@ def add_person():
 def update_person(id):
     conn = get_connection()
     cursor = conn.cursor()
+
     if request.method == 'POST':
-        phone = request.form['phone']
+        gender = request.form['gender'].strip()
         phone = normalize_phone(request.form['phone'])
-        address = request.form['address']
+        email = request.form['email'].strip()
+        address = request.form['address'].strip()
+
+        # Validations
+        if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
+            flash("⚠️ Invalid email format.", "warning")
+            return redirect(url_for('update_person', id=id))
+
+        if not phone.isdigit() or len(phone) != 10:
+            flash("⚠️ Phone must be 10 digits.", "warning")
+            return redirect(url_for('update_person', id=id))
+
         cursor.execute("""
-            UPDATE Persons SET phone=%s, email=%s, address=%s WHERE person_id=%s
-        """, (phone, email, address, id))
+            UPDATE Persons SET gender=%s, phone=%s, email=%s, address=%s WHERE person_id=%s
+        """, (gender, phone, email, address, id))
         conn.commit()
         flash("✅ Record updated!", "info")
         cursor.close()
@@ -150,6 +169,7 @@ def update_person(id):
     cursor.close()
     conn.close()
     return render_template('update_person.html', person=person)
+
 
 @app.route('/delete/<int:id>')
 def delete_person(id):
