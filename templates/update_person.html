@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Update Person Info</h2>
+<form method="POST">
+    <p><b>Name:</b> {{ person[1] }}</p>
+    <div class="mb-2"><input class="form-control" name="phone" value="{{ person[4] }}" placeholder="Phone"></div>
+    <div class="mb-2"><input class="form-control" name="email" value="{{ person[5] }}" placeholder="Email"></div>
+    <div class="mb-2"><textarea class="form-control" name="address">{{ person[6] }}</textarea></div>
+    <button class="btn btn-info">Update</button>
+</form>
+{% endblock %}

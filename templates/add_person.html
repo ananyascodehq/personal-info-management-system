@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add Person</h2>
+
+<form method="POST" onsubmit="return validateForm()">
+    <div class="mb-2">
+        <input class="form-control" name="name" placeholder="Full Name" required>
+    </div>
+    <div class="mb-2">
+        <input class="form-control" name="dob" type="date" max="{{ current_date }}" title="Date cannot be in the future">
+    </div>
+
+    <div class="mb-2">
+        <input class="form-control" name="gender" placeholder="Gender">
+    </div>
+    <div class="mb-2">
+        <input class="form-control" name="phone" placeholder="Phone (10 digits)" pattern="\d{10}" required>
+    </div>
+    <div class="mb-2">
+        <input class="form-control" name="email" type="email" placeholder="Email" required>
+    </div>
+    <div class="mb-2">
+        <textarea class="form-control" name="address" placeholder="Address"></textarea>
+    </div>
+    <button class="btn btn-success">Add</button>
+</form>
+
+<script>
+function validateForm() {
+    const name = document.querySelector("[name='name']").value.trim();
+    const phone = document.querySelector("[name='phone']").value.trim();
+    const email = document.querySelector("[name='email']").value.trim();
+
+    if (!name || !phone || !email) {
+        alert("⚠️ Please fill in all required fields: Name, Phone, and Email.");
+        return false;
+    }
+    if (!/^\d{10}$/.test(phone)) {
+        alert("⚠️ Phone number must be exactly 10 digits.");
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}
